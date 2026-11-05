@@ -1,0 +1,809 @@
+/* ============================================================
+   La Profecía del Glifo de ÉL — styles.css (solo HTML + CSS)
+   ------------------------------------------------------------
+   HOJA DE ESTILOS COMPARTIDA POR TODAS LAS PÁGINAS DEL LIBRO.
+
+   GUÍA PARA PROGRAMADORES — CLASES PRINCIPALES:
+     .portada            → pantalla de portada (solo index.html)
+     .portada-fondo      → brillos animados de fondo (solo CSS)
+     .portada-contenido  → apila imagen + botón en columna
+     .portada-img        → imagen de la portada
+     .btn-abrir          → botón "Abrir el libro"
+     .paginaplana        → contenedor que centra la página en pantalla
+     .pagina             → hoja de "pergamino" con sombra
+     .pagina-inner       → márgenes internos de la hoja
+     .numero-cap         → etiqueta pequeña dorada arriba ("Introducción — II")
+     .titulo-cap         → título grande de la página
+     .contenido          → zona de texto del libro
+     .nav-pagina         → barra inferior: Anterior / nº página / Siguiente
+     .btn-nav            → botones de navegación (enlaces <a>)
+     .num-pag            → número de página del centro
+
+   CLASES ESPECIALES DE PÁRRAFO (dentro de .contenido):
+     .pregunta   → pregunta centrada, cursiva y dorada
+     .separador  → línea decorativa ✦ ✦ ✦
+     .nombre     → nombre u objeto importante, centrado y resaltado
+     .cita       → cita textual entre líneas doradas
+
+   CÓMO AGREGAR UN NUEVO ESTILO:
+     · Usa las variables de color de :root para mantener la
+       paleta (oro, fuego, pergamino...).
+     · Los estilos que afectan a páginas específicas van al final
+       de cada bloque, antes del bloque RESPONSIVE.
+   ============================================================ */
+:root {
+  --oro: #d4a83f;
+  --oro-claro: #f0d9a0;
+  --fuego: #c96a1b;
+  --oscuro: #0d0a07;
+  --oscuro-2: #1a130b;
+  --tinta: #2b2318;
+  --pergamino: #f4ecd9;
+  --sombra: rgba(0, 0, 0, 0.55);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201, 106, 27, 0.08), transparent 55%),
+    var(--oscuro-2);
+  color: var(--pergamino);
+}
+
+/* ================= PORTADA ================= */
+.portada {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--oscuro);
+}
+
+.portada-fondo {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(201, 106, 27, 0.25), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(212, 168, 63, 0.12), transparent 55%),
+    var(--oscuro);
+  animation: brillo 8s ease-in-out infinite alternate;
+}
+
+@keyframes brillo {
+  from { opacity: 0.85; }
+  to { opacity: 1; }
+}
+
+.portada-contenido {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  animation: aparecer 1.6s ease both;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.portada-img {
+  max-width: min(85vw, 620px);
+  max-height: 72vh;
+  border-radius: 10px;
+  box-shadow:
+    0 0 60px rgba(212, 168, 63, 0.35),
+    0 0 120px rgba(201, 106, 27, 0.2),
+    0 25px 60px var(--sombra);
+  border: 1px solid rgba(212, 168, 63, 0.4);
+}
+
+.btn-abrir {
+  margin-top: 34px;
+  display: inline-block;
+  padding: 16px 46px;
+  font-family: "Cinzel", serif;
+  font-size: 1.05rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--oro-claro);
+  background: linear-gradient(180deg, #2a2013, #17110a);
+  border: 1px solid var(--oro);
+  border-radius: 4px;
+  transition: all 0.35s ease;
+  box-shadow: 0 0 18px rgba(212, 168, 63, 0.25), inset 0 0 12px rgba(212, 168, 63, 0.12);
+}
+
+.btn-abrir:hover {
+  background: linear-gradient(180deg, #3a2c1a, #241a0e);
+  box-shadow: 0 0 34px rgba(212, 168, 63, 0.55), inset 0 0 18px rgba(212, 168, 63, 0.25);
+  transform: translateY(-2px);
+}
+
+/* ================= PÁGINA DE LECTURA ================= */
+.paginaplana {
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 20px;
+  perspective: 2000px;
+}
+
+.pagina {
+  width: min(80vw, 620px);
+  min-height: min(76vh, 640px);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.6), transparent 60%),
+    var(--pergamino);
+  color: var(--tinta);
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 1px rgba(212, 168, 63, 0.35),
+    0 30px 70px var(--sombra),
+    0 0 80px rgba(201, 106, 27, 0.12);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pagina::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(120, 90, 40, 0.015) 2px 3px),
+    radial-gradient(ellipse at 15% 15%, rgba(120, 90, 40, 0.07), transparent 45%);
+}
+
+.pagina-inner {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 34px 44px 18px;
+  display: flex;
+  flex-direction: column;
+  animation: fadein 0.6s ease;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.numero-cap {
+  font-family: "Cinzel", serif;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: var(--fuego);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.titulo-cap {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 1.7rem;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #4a3410;
+  margin-bottom: 6px;
+}
+
+.titulo-cap::after {
+  content: "";
+  display: block;
+  width: 90px;
+  height: 1px;
+  margin: 16px auto 26px;
+  background: linear-gradient(90deg, transparent, var(--oro), transparent);
+}
+
+.contenido p {
+  font-size: 1.18rem;
+  line-height: 1.85;
+  text-align: justify;
+  margin-bottom: 1.15em;
+  text-indent: 2em;
+}
+
+.contenido p:first-of-type { text-indent: 0; }
+
+/* Frases especiales */
+.pregunta {
+  font-style: italic;
+  font-weight: 600;
+  text-align: center !important;
+  text-indent: 0 !important;
+  color: #6b4a12;
+  font-size: 1.25rem !important;
+  margin-bottom: 0.4em !important;
+}
+
+.separador {
+  text-align: center !important;
+  text-indent: 0 !important;
+  color: var(--oro);
+  letter-spacing: 8px;
+  font-size: 0.9rem !important;
+  margin: 1.4em 0 !important;
+}
+
+.nombre {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  text-align: center !important;
+  text-indent: 0 !important;
+  color: #6b4a12;
+  font-size: 1.5rem !important;
+  letter-spacing: 1px;
+  margin-bottom: 0.4em !important;
+}
+
+.cita {
+  font-style: italic;
+  text-align: center !important;
+  text-indent: 0 !important;
+  color: #6b4a12;
+  font-size: 1.3rem !important;
+  border-left: 3px solid var(--oro);
+  border-right: 3px solid var(--oro);
+  padding: 10px 20px;
+  margin: 1.2em auto !important;
+  max-width: 85%;
+}
+
+/* Etiquetas y títulos de capítulo (Prólogo — II, La Advertencia, etc.)
+   ⚠ Desactivados a petición del autor: las páginas NO muestran títulos.
+   Si algún día quieres volver a mostrarlos, borra este bloque. */
+.numero-cap,
+.titulo-cap { display: none !important; }
+
+/* Deja el aire visual que los títulos ocupaban */
+.pagina-inner { padding-top: 54px; }
+
+/* Portada de capítulo: imagen con texto superpuesto (ej.: prólogo) */
+.portada-cap {
+  width: min(100%, 340px);
+  aspect-ratio: 3 / 4;
+  margin: 0 auto 22px;
+  background-size: cover;
+  background-position: center 20%;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 168, 63, 0.45);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+/* Degradado oscuro al pie de la imagen para que el texto se lea bien */
+.portada-cap::after {
+  content: "";
+  position: absolute;
+  inset: 40% 0 0 0;
+  background: linear-gradient(to top, rgba(10, 7, 4, 0.92), rgba(10, 7, 4, 0.55) 55%, transparent);
+}
+.portada-cap-texto {
+  position: relative;
+  z-index: 2;
+  font-family: "Cinzel", serif;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  letter-spacing: clamp(1px, 0.6vw, 3px);
+  color: var(--oro);
+  padding: 0 12px 20px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.portada-cap-texto span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.55em;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.portada-cap-texto .portada-cap-titulo {
+  margin-bottom: 0;
+  font-size: 1em;
+  letter-spacing: inherit;
+  line-height: 1.2;
+  text-transform: none;
+  text-wrap: balance;
+}
+
+/* Diálogo de personaje (—Señor...) */
+.dialogo {
+  font-style: italic;
+  text-indent: 0 !important;
+  color: #4a3410;
+  font-weight: 600;
+  border-left: 3px solid var(--oro);
+  padding: 6px 0 6px 18px;
+  margin-bottom: 1.1em !important;
+}
+
+/* Imagen de portada dentro de páginas (ej.: prólogo) */
+.portada-intro {
+  display: block;
+  max-width: 62%;
+  height: auto;
+  margin: 0 auto 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 168, 63, 0.45);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+}
+
+/* ================= ÍNDICE DEL LIBRO ================= */
+/* Título de la página de índice (siempre visible, a diferencia
+   de los títulos de capítulo que están desactivados) */
+.indice-titulo-pag {
+  font-family: "Cinzel", serif;
+  font-size: 1.9rem;
+  color: var(--oro);
+  text-align: center;
+  letter-spacing: 6px;
+  margin-bottom: 34px;
+  border-bottom: 2px solid rgba(212, 168, 63, 0.4);
+  padding-bottom: 14px;
+}
+/* Lista de partes: cada ítem es un enlace clicable */
+.indice-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.indice-item { margin-bottom: 10px; }
+/* Fila del índice: nombre + línea punteada + número de página */
+.indice-item a {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  text-decoration: none;
+  color: #3a2a10;
+  padding: 10px 8px;
+  border-radius: 6px;
+  transition: background 0.2s, transform 0.2s;
+}
+/* Efecto al pasar el mouse: se ilumina en dorado */
+.indice-item a:hover {
+  background: rgba(212, 168, 63, 0.14);
+  transform: translateX(4px);
+}
+.indice-nombre {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #3a2a10;
+}
+/* Línea punteada entre el nombre y el número (efecto libro clásico) */
+.indice-linea {
+  flex: 1;
+  border-bottom: 2px dotted rgba(122, 84, 28, 0.4);
+}
+.indice-pag {
+  font-family: "Cinzel", serif;
+  font-size: 0.95rem;
+  color: var(--fuego);
+}
+
+/* ================= NAVEGACIÓN ENTRE PÁGINAS ================= */
+.nav-pagina {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0 10px;
+  margin-top: auto;
+  border-top: 1px solid rgba(212, 168, 63, 0.35);
+}
+
+.btn-nav {
+  display: inline-block;
+  background: none;
+  border: 1px solid rgba(201, 106, 27, 0.5);
+  color: #6b4a12;
+  font-family: "Cinzel", serif;
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  padding: 10px 22px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btn-nav:hover {
+  background: rgba(201, 106, 27, 0.12);
+  box-shadow: 0 0 12px rgba(201, 106, 27, 0.25);
+  transform: translateY(-1px);
+}
+
+.num-pag {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  color: #8a6a2a;
+}
+
+/* Foco visible para navegación con teclado */
+:focus-visible {
+  outline: 3px solid var(--fuego);
+  outline-offset: 4px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 700px) {
+  .paginaplana { padding: 20px 12px; }
+  .pagina { width: 100%; }
+  .pagina-inner { padding: 24px 18px 14px; }
+  .portada-cap-texto {
+    max-width: 100%;
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: clamp(1rem, 5vw, 1.4rem);
+    letter-spacing: clamp(1px, 1vw, 3px);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .titulo-cap { font-size: 1.3rem; }
+  .contenido p { font-size: 1.02rem; line-height: 1.7; }
+  .btn-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 9px 10px;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ================= LIBRO COMPLETO E IMPRESIÓN A PDF ================= */
+  .indice-descarga {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .pagina-libro {
+    min-height: 100%;
+    height: auto;
+    background: #e7dfcf;
+    color: var(--tinta);
+  }
+
+  .book-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px max(20px, calc((100% - 860px) / 2));
+    background: var(--oscuro-2);
+  }
+
+  .book-toolbar button {
+    cursor: pointer;
+  }
+
+  .book-toolbar .btn-nav {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    color: var(--oro-claro);
+    border-color: var(--oro);
+    text-align: center;
+  }
+
+  .libro-completo {
+    max-width: 900px;
+    margin: 28px auto;
+    padding: clamp(40px, 6vw, 64px) clamp(28px, 8vw, 80px);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.45), transparent 58%),
+      var(--pergamino);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  }
+
+  .libro-portada {
+    min-height: 78vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .libro-portada img {
+    width: min(100%, 360px);
+    max-height: 60vh;
+    object-fit: contain;
+    margin-bottom: 28px;
+  }
+
+  .libro-portada h1,
+  .seccion-libro h2 {
+    font-family: "Cinzel", serif;
+    color: #4a3410;
+    text-align: center;
+  }
+
+  .libro-portada h1 {
+    max-width: 18ch;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-wrap: balance;
+  }
+
+  .libro-portada > p {
+    font-size: 1.2rem;
+  }
+
+  .instruccion-pdf {
+    margin-top: 24px;
+    font-style: italic;
+  }
+
+  .print-site-footer {
+    display: none;
+  }
+
+  .seccion-libro {
+    border-top: 1px solid rgba(122, 84, 28, 0.35);
+    padding: clamp(36px, 5vw, 54px) 0;
+  }
+
+  .seccion-libro .contenido {
+    width: 100%;
+    max-width: 68ch;
+    margin-inline: auto;
+  }
+
+  .seccion-libro .contenido p {
+    font-size: 1.16rem;
+    line-height: 1.75;
+  }
+
+  .seccion-libro h2 {
+    font-size: 1.65rem;
+    margin-bottom: 24px;
+  }
+
+  .seccion-continuara {
+    text-align: center;
+  }
+
+  .continuara-etiqueta {
+    margin-bottom: 8px;
+    color: var(--fuego);
+    font-family: "Cinzel", serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+  }
+
+  .seccion-continuara .contenido p {
+    text-align: center;
+    text-indent: 0;
+  }
+
+  .portada-capitulo {
+    position: relative;
+    width: min(100%, 350px);
+    aspect-ratio: 3 / 4;
+    margin: 36px auto 42px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 168, 63, 0.45);
+    border-radius: 8px;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+
+  .portada-capitulo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .portada-capitulo figcaption {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    margin: 0;
+    padding: 20px 12px;
+    background: linear-gradient(to top, rgba(10, 7, 4, 0.92), rgba(10, 7, 4, 0.55) 65%, transparent);
+    color: var(--oro);
+    font-family: "Cinzel", serif;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    letter-spacing: clamp(1px, 0.6vw, 3px);
+    line-height: 1.25;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+    text-wrap: balance;
+  }
+
+  .portada-capitulo figcaption span {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.55em;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 700px) {
+    .book-toolbar {
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .book-toolbar .btn-nav {
+      flex: 1 1 180px;
+      padding: 10px 12px;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+    }
+
+    .libro-completo {
+      margin: 0;
+      padding: 32px clamp(16px, 5vw, 28px);
+    }
+
+    .libro-portada {
+      min-height: 72vh;
+    }
+
+    .seccion-libro .contenido p {
+      font-size: 1.08rem;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .seccion-continuara .contenido p {
+      text-align: center;
+    }
+
+    .portada-capitulo {
+      width: min(100%, 320px);
+    }
+  }
+
+  @media print {
+    @page {
+      size: A4;
+      margin: 18mm;
+    }
+
+    html,
+    body.pagina-libro {
+      height: auto !important;
+      min-height: 0;
+      background: #fff;
+      color: #222;
+    }
+
+    .book-toolbar,
+    .instruccion-pdf {
+      display: none !important;
+    }
+
+    .print-site-footer {
+      position: fixed;
+      right: 0;
+      bottom: -12mm;
+      left: 0;
+      display: block;
+      border-top: 0.3pt solid #b8a77f;
+      padding-top: 2mm;
+      color: #66583d;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 8pt;
+      text-align: center;
+    }
+
+    .print-site-footer a {
+      color: #66583d;
+      text-decoration: none;
+    }
+
+    .libro-completo {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      box-shadow: none;
+    }
+
+    .libro-portada {
+      min-height: 0;
+      height: 245mm;
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .libro-portada img {
+      max-width: 150mm;
+      max-height: 180mm;
+    }
+
+    .seccion-libro {
+      border: 0;
+      padding: 0;
+      break-before: page;
+      page-break-before: always;
+    }
+
+    .portada-capitulo {
+      width: 150mm;
+      height: 200mm;
+      aspect-ratio: auto;
+      margin: 20mm auto 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      break-after: page;
+      page-break-after: always;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .portada-capitulo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .portada-capitulo figcaption {
+      padding: 10mm 8mm;
+      font-size: 18pt;
+      color: var(--oro);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .portada-capitulo figcaption span {
+      margin-bottom: 3mm;
+      font-size: 10pt;
+    }
+
+    .seccion-libro h2 {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    .libro-completo .contenido p {
+      color: #222;
+      font-size: 11pt;
+      line-height: 1.55;
+      orphans: 3;
+      widows: 3;
+    }
+  }

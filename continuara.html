@@ -1,0 +1,67 @@
+<!--
+  ============================================================
+  continuara.html — PÁGINA "CONTINUARÁ" (página final, en la raíz)
+  ------------------------------------------------------------
+  QUÉ ES:  Página de cierre temporal. Anuncia que la historia
+           continúa. SE REUTILIZA cada vez que se publiquen
+           nuevas partes (semanal o diariamente).
+
+  QUÉ HACER CADA VEZ QUE SALGA UNA NUEVA PARTE:
+    1. Crea las páginas nuevas del capítulo.
+    2. Actualiza el índice y el botón "Continuar" de la última
+       página publicada para que apunte a la nueva parte.
+    3. Cambia el texto del anuncio si la fecha cambia.
+    4. Conserva el enlace "Anterior" a la última página publicada.
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Cabeza de la página: configuración básica -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Continuará… — La Profecía del Glifo de ÉL</title>
+
+  <!-- Tipografías antiguas (Cinzel para títulos, Cormorant para texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Hoja de estilos compartida por TODO el libro (misma carpeta raíz) -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Contenedor centrado estilo "página de libro" -->
+  <main class="pagina paginaplana">
+    <div class="pagina-inner">
+
+      <!-- Etiqueta pequeña dorada que aparece arriba de la página -->
+      <div class="numero-cap">Próximamente</div>
+
+      <!-- Título grande de la página -->
+      <h2 class="titulo-cap">Continuará…</h2>
+
+      <div class="contenido">
+        <p>La historia no termina aquí.</p>
+        <p>Los registros que SoloSoyJuan dejó atrás apenas comienzan a revelarse.</p>
+        <p class="separador">✦ ✦ ✦</p>
+        <p class="nombre">Continuaremos la próxima semana con la otra parte.</p>
+        <p class="cita">“Tarde o temprano comprenderán que todo esto era real.”</p>
+        <p>El pacto te espera.</p>
+      </div>
+
+      <!-- Navegación: enlaces a la página anterior (y futura) -->
+      <nav class="nav-pagina">
+        <a href="capitulos/capitulo-10.html" class="btn-nav">‹ Anterior</a>
+        <span class="num-pag">30</span>
+        <!-- Cuando se publique una nueva parte, actualiza este enlace
+             y el enlace "Anterior" para mantener el recorrido. -->
+        <a href="index.html" class="btn-nav">Volver a la portada ›</a>
+      </nav>
+
+    </div>
+  </main>
+
+</body>
+</html>
