@@ -151,6 +151,7 @@ h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
 .cover-image { transition: transform .25s ease, box-shadow .25s ease; }
 .cover-link:hover .cover-image { transform: rotateY(-3deg) translateY(-3px); }
 .cover-hint { margin: 0; color: #b69a6c; font-size: .86rem; text-align: center; }
+.cover-print-action { margin-top: 10px; }
 .back-cover-page { padding-top: 8px; }
 .back-cover-image { width: min(360px, 78vw); }
 
@@ -266,6 +267,115 @@ textarea { min-height: 280px; resize: vertical; line-height: 1.8; }
 .local-notice { margin: 0 0 20px; padding: 12px 14px; border-left: 3px solid #a56b26; color: #54351b; background: rgba(255,253,246,.62); font: .9rem/1.55 Arial, sans-serif; }
 .site-footer { padding: 0 16px 22px; color: #9d8b72; text-align: center; font: .78rem Arial, sans-serif; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+
+.print-book { position: absolute; top: 0; left: -10000px; width: 8.5in; }
+.print-entry {
+    position: relative;
+    width: 8.5in;
+    height: 11in;
+    background: #160d0a;
+    overflow: hidden;
+    break-after: page;
+    page-break-after: always;
+}
+.print-entry-page { position: relative; width: 7.333333in; height: 11in; margin: 0 auto; overflow: hidden; }
+.print-page-background { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; }
+.print-entry-layout { position: relative; z-index: 1; display: flex; box-sizing: border-box; width: 100%; height: 100%; flex-direction: column; padding: 20% 23% 24%; container-type: inline-size; }
+.print-entry-layout h2 { flex: 0 0 auto; margin: 0 0 18px; color: #351d0c; font-size: clamp(1.3rem, 7cqw, 2.35rem); line-height: 1.2; }
+.print-entry-content { min-height: 0; flex: 1 1 auto; overflow: hidden; overflow-wrap: anywhere; white-space: pre-wrap; font-size: 15pt; line-height: 1.65; text-align: justify; text-justify: inter-word; }
+
+@media print {
+    @page { size: letter; margin: 0; }
+    html, body { width: 100%; min-height: 0; margin: 0; padding: 0; color: #21170f; background: #160d0a; }
+    .site-header, .site-footer { display: none !important; }
+    .container { width: 100%; min-height: 0; margin: 0; padding: 0; }
+    .print-book {
+        display: block;
+        position: static;
+        top: auto;
+        left: auto;
+        width: 8.5in;
+        color: #21170f;
+        font: 11pt/1.6 Georgia, "Times New Roman", serif;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .print-cover, .print-copyright, .print-index, .print-ending, .print-back-cover, .print-entry {
+        box-sizing: border-box;
+        width: 8.5in;
+        height: 11in;
+        min-height: 0;
+        margin-right: 0;
+        margin-left: 0;
+        padding: 1.1in 1.35in;
+        break-after: page;
+        page-break-after: always;
+    }
+    .print-entry { padding: 0; background: #160d0a; }
+    .print-entry-page { width: 7.333333in; height: 11in; }
+    .print-entry-layout { padding: 20% 23% 24%; }
+    .print-cover, .print-copyright, .print-ending, .print-back-cover {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .print-cover, .print-back-cover { padding: 0; background: #160d0a; color: #f7ead0; }
+    .print-cover {
+        gap: .22in;
+        background:
+            radial-gradient(ellipse at 50% -20%, rgba(119, 62, 24, .38), transparent 55%),
+            linear-gradient(145deg, #0d0908, #21120d 55%, #100b09);
+    }
+    .print-cover-art { position: relative; width: min(360px, 78vw); aspect-ratio: 2 / 3; flex: none; overflow: visible; }
+    .print-back-cover-art { position: relative; width: 7.333333in; height: 11in; flex: none; overflow: hidden; }
+    .print-cover-art { margin: 0 auto; }
+    .print-back-cover-art { width: 7.333333in; margin: 0 auto; }
+    .print-cover { break-after: page; page-break-after: always; }
+    .print-cover-image, .print-back-cover-image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+    .print-cover-frame { position: absolute; z-index: 1; inset: 0; display: block; width: 100%; height: 100%; }
+    .print-cover .print-cover-image {
+        border: 1px solid rgba(255, 207, 100, .75);
+        border-radius: 3px 8px 8px 3px;
+        box-shadow: 14px 18px 34px rgba(0, 0, 0, .58), 5px 0 0 #4c2912, 8px 0 0 #1b100b;
+    }
+    .print-cover .print-copyright-notice {
+        position: static;
+        z-index: auto;
+        width: min(360px, 78vw);
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        color: #ffd77f;
+        background: transparent;
+        font: 8pt/1.35 Arial, sans-serif;
+        text-align: center;
+    }
+    .print-copyright { text-align: center; }
+    .print-copyright h2 { font-size: 20pt; }
+    .print-index { text-align: left; }
+    .print-index h2 { text-align: center; }
+    .print-index li { margin-bottom: .12in; }
+    .print-has-paper-background { position: relative; overflow: hidden; }
+    .print-has-paper-background > :not(.print-page-background) { position: relative; z-index: 1; }
+    .print-cover, .print-back-cover { position: relative; overflow: hidden; }
+    .print-back-cover .print-source-footer { z-index: 2; }
+    .print-entry-content { orphans: 3; widows: 3; }
+    .print-ending { break-after: page; page-break-after: always; }
+    .print-back-cover { break-after: auto; page-break-after: auto; }
+    .print-source-footer {
+        position: absolute;
+        right: .5in;
+        bottom: .15in;
+        left: .5in;
+        color: #ffd77f;
+        font: 8pt/1.2 Arial, sans-serif;
+        text-align: center;
+        text-shadow: 0 1px 2px #000;
+        background: rgba(22, 13, 10, .78);
+    }
+}
 
 @media (max-width: 620px) {
     .site-header { width: min(100% - 28px, 1120px); align-items: flex-start; flex-direction: column; gap: 12px; }

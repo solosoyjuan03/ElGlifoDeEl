@@ -8,6 +8,8 @@ Abre `index.html` en un navegador moderno o visita la carpeta `/diario/` en el s
 
 El recorrido de lectura es portada → índice → páginas → «Continuará» → contraportada. Las entradas nuevas y los cambios se guardan en el almacenamiento local del navegador; no se sincronizan entre dispositivos. Usa **Exportar respaldo** para guardar una copia JSON.
 
+Debajo de la portada, usa **Imprimir / Guardar como PDF** para guardar el libro completo (portada, índice y entradas) en PDF. Las hojas usan los colores del diario y llevan la textura de papel como imagen; no hace falta activar **Gráficos de fondo**.
+
 ## Datos y privacidad
 
 `data/initial-data.js` incluye las entradas iniciales del diario. Como este repositorio es público, tanto esas entradas como el código y las imágenes de esta carpeta pueden ser consultados y descargados por cualquiera.

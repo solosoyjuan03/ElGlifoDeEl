@@ -11,6 +11,7 @@
     let entries = [];
     let flashMessage = null;
     let resizeTimer = 0;
+    let printReturnHash = null;
 
     const isEditor = () => sessionStorage.getItem(SESSION_KEY) === "active";
     const escapeHash = (value) => encodeURIComponent(String(value));
@@ -125,7 +126,12 @@
         image.src = "static/images/portada-diario.png";
         image.alt = "El diario de SolosoyJuan";
         coverLink.append(image);
-        section.append(coverLink, makeLink("Abrir el diario", "#/indice", "btn btn-primary"), makeElement("p", "cover-hint", "Haz clic en la portada para empezar a leer"));
+        section.append(
+            coverLink,
+            makeLink("Abrir el diario", "#/indice", "btn btn-primary"),
+            makeElement("p", "cover-hint", "Haz clic en la portada para empezar a leer"),
+            makeButton("Imprimir / Guardar como PDF", "btn cover-print-action", printBook)
+        );
         app.append(section);
     }
 
@@ -159,6 +165,153 @@
         navigation.append(makeLink("← Portada", "#/"));
         if (entries.length) navigation.append(makeLink("Empezar a leer →", `#/entrada/${escapeHash(entries[0].id)}`, "btn btn-primary"));
         app.append(navigation);
+    }
+
+    function printBook() {
+        printReturnHash = location.hash || "#/";
+        footer.hidden = true;
+        const book = makeElement("section", "print-book");
+        app.replaceChildren(book);
+
+        const cover = makeElement("header", "print-cover");
+        const coverArt = makeElement("div", "print-cover-art");
+        const coverImage = document.createElement("img");
+        coverImage.className = "print-cover-image";
+        coverImage.src = "static/images/portada-diario.png";
+        coverImage.alt = "Portada de El diario de SolosoyJuan";
+        const copyrightNotice = makeElement("p", "print-copyright-notice", `Autor: Juan D. Henao · © ${new Date().getFullYear()} Juan D. Henao. Todos los derechos reservados.`);
+        coverArt.append(coverImage);
+        cover.append(coverArt, copyrightNotice);
+        book.append(cover);
+
+        const copyright = makeElement("section", "print-copyright");
+        addPrintPaperBackground(copyright);
+        copyright.append(
+            makeElement("h2", "", "Derechos de autor"),
+            makeElement("p", "", `© ${new Date().getFullYear()} Juan D. Henao. Todos los derechos reservados.`),
+            makeElement("p", "", "Autor declarado: Juan D. Henao."),
+            makeElement("p", "", "Este diario es una obra protegida por derechos de autor. Conserva esta atribución al citar o resumir su contenido. La reproducción o distribución requiere autorización del titular, salvo los usos permitidos por la ley.")
+        );
+        book.append(copyright);
+
+        const index = makeElement("section", "print-index");
+        addPrintPaperBackground(index);
+        index.append(makeElement("h2", "", "Índice"));
+        const list = document.createElement("ol");
+        entries.forEach(entry => list.append(makeElement("li", "", entry.title)));
+        index.append(list);
+        book.append(index);
+
+        entries.forEach(entry => {
+            addPrintEntryPages(book, entry);
+        });
+
+        const ending = makeElement("section", "print-ending");
+        addPrintPaperBackground(ending);
+        ending.append(makeElement("h2", "", "Continuará..."));
+        book.append(ending);
+        const backCover = makeElement("section", "print-back-cover");
+        const backCoverArt = makeElement("div", "print-back-cover-art");
+        const backCoverImage = document.createElement("img");
+        backCoverImage.className = "print-back-cover-image";
+        backCoverImage.src = "static/images/contraportada-cuero.png";
+        backCoverImage.alt = "Contraportada del diario";
+        backCoverArt.append(
+            backCoverImage,
+            createPrintOrnamentalFrame(),
+            makeElement("footer", "print-source-footer", "Descargado desde https://solosoyjuan03.github.io/solosoyjuan/")
+        );
+        backCover.append(backCoverArt);
+        book.append(backCover);
+
+        Promise.all(Array.from(book.querySelectorAll("img"), image => image.decode()))
+            .then(() => window.print())
+            .catch(error => {
+                printReturnHash = null;
+                showFlash(`No se pudo preparar el PDF porque falló una imagen: ${error.message}`, "error");
+            });
+    }
+
+    function createPrintOrnamentalFrame() {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 1152" fill="none">
+            <rect x="28" y="28" width="712" height="1096" rx="22" stroke="#f2b94f" stroke-width="5" opacity=".9"/>
+            <rect x="48" y="48" width="672" height="1056" rx="16" stroke="#ffd77f" stroke-width="2" opacity=".8"/>
+            <path d="M92 155H676M92 997H676M92 155V997M676 155V997" stroke="#e7ad45" stroke-width="2" opacity=".65"/>
+            <g stroke="#ffd77f" stroke-width="3" opacity=".9">
+                <circle cx="92" cy="92" r="34"/><circle cx="676" cy="92" r="34"/>
+                <circle cx="92" cy="1060" r="34"/><circle cx="676" cy="1060" r="34"/>
+                <circle cx="384" cy="92" r="20"/><circle cx="384" cy="1060" r="20"/>
+                <path d="M92 68l24 24-24 24-24-24zM676 68l24 24-24 24-24-24z"/>
+                <path d="M92 1036l24 24-24 24-24-24zM676 1036l24 24-24 24-24-24z"/>
+                <path d="M384 68v48m-24-24h48M384 1036v48m-24-24h48"/>
+            </g>
+            <g stroke="#e7ad45" stroke-width="2" opacity=".7">
+                <path d="M150 140l15 15-15 15-15-15zM194 140l15 15-15 15-15-15zM238 140l15 15-15 15-15-15zM282 140l15 15-15 15-15-15z"/>
+                <path d="M486 140l15 15-15 15-15-15zM530 140l15 15-15 15-15-15zM574 140l15 15-15 15-15-15zM618 140l15 15-15 15-15-15z"/>
+                <path d="M150 982l15 15-15 15-15-15zM194 982l15 15-15 15-15-15zM238 982l15 15-15 15-15-15zM282 982l15 15-15 15-15-15z"/>
+                <path d="M486 982l15 15-15 15-15-15zM530 982l15 15-15 15-15-15zM574 982l15 15-15 15-15-15zM618 982l15 15-15 15-15-15z"/>
+                <path d="M92 230l-15 15 15 15 15-15zM92 310l-15 15 15 15 15-15zM92 390l-15 15 15 15 15-15zM92 470l-15 15 15 15 15-15zM92 550l-15 15 15 15 15-15zM92 630l-15 15 15 15 15-15zM92 710l-15 15 15 15 15-15zM92 790l-15 15 15 15 15-15zM92 870l-15 15 15 15 15-15z"/>
+                <path d="M676 230l-15 15 15 15 15-15zM676 310l-15 15 15 15 15-15zM676 390l-15 15 15 15 15-15zM676 470l-15 15 15 15 15-15zM676 550l-15 15 15 15 15-15zM676 630l-15 15 15 15 15-15zM676 710l-15 15 15 15 15-15zM676 790l-15 15 15 15 15-15zM676 870l-15 15 15 15 15-15z"/>
+            </g>
+        </svg>`;
+        const image = document.createElement("img");
+        image.className = "print-cover-frame";
+        image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+        image.alt = "";
+        image.setAttribute("aria-hidden", "true");
+        return image;
+    }
+
+    function addPrintPaperBackground(section) {
+        section.classList.add("print-has-paper-background");
+        const image = document.createElement("img");
+        image.className = "print-page-background";
+        image.src = "static/images/fondo-paginas-diario.jpg";
+        image.alt = "";
+        image.setAttribute("aria-hidden", "true");
+        section.prepend(image);
+    }
+
+    function addPrintEntryPages(book, entry) {
+        const words = entry.content.trim().match(/\S+\s*/g) || [];
+        let start = 0;
+        let pageIndex = 0;
+
+        while (start < words.length) {
+            const page = makeElement("article", "print-entry");
+            const paper = makeElement("div", "print-entry-page print-has-paper-background");
+            const background = document.createElement("img");
+            background.className = "print-page-background";
+            background.src = "static/images/fondo-paginas-diario.jpg";
+            background.alt = "";
+            background.setAttribute("aria-hidden", "true");
+
+            const content = makeElement("div", "print-entry-layout");
+            const title = makeElement("h2", "", entry.title);
+            const text = makeElement("div", "print-entry-content");
+            content.append(title, text);
+            paper.append(background, content);
+            page.append(paper);
+            book.append(page);
+
+            let low = 1;
+            let high = words.length - start;
+            let fittingWords = 0;
+            while (low <= high) {
+                const middle = Math.floor((low + high) / 2);
+                text.textContent = words.slice(start, start + middle).join("");
+                if (text.scrollHeight <= text.clientHeight + 1 && text.scrollWidth <= text.clientWidth + 1) {
+                    fittingWords = middle;
+                    low = middle + 1;
+                } else {
+                    high = middle - 1;
+                }
+            }
+            if (fittingWords === 0) fittingWords = 1;
+            text.textContent = words.slice(start, start + fittingWords).join("");
+            start += fittingWords;
+            pageIndex += 1;
+        }
     }
 
     function renderEntry(entryId) {
@@ -483,6 +636,13 @@
     });
 
     window.addEventListener("hashchange", render);
+    window.addEventListener("afterprint", () => {
+        if (printReturnHash === null) return;
+        const returnHash = printReturnHash;
+        printReturnHash = null;
+        if (location.hash === returnHash) render();
+        else navigate(returnHash);
+    });
     window.addEventListener("resize", () => {
         window.clearTimeout(resizeTimer);
         resizeTimer = window.setTimeout(() => {
