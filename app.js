@@ -4,6 +4,7 @@
     const ENTRIES_KEY = "diario-solosoyjuan.entries.v1";
     const PASSWORD_KEY = "diario-solosoyjuan.editor-hash.v1";
     const SESSION_KEY = "diario-solosoyjuan.editor-session.v1";
+    const OWNER_USERNAME = "solosoyjuan";
     const app = document.getElementById("app");
     const siteNav = document.getElementById("site-nav");
     const footer = document.getElementById("site-footer");
@@ -100,7 +101,7 @@
         siteNav.replaceChildren();
         if (isEditor()) {
             siteNav.append(
-                makeElement("span", "user-name", "✦ Modo edición"),
+                makeElement("span", "user-name", `✦ ${OWNER_USERNAME}`),
                 makeLink("+ Nueva página", "#/nueva", "btn btn-primary"),
                 makeButton("Exportar respaldo", "btn", exportBackup),
                 makeButton("Importar respaldo", "btn", () => importFile.click()),
@@ -361,11 +362,22 @@
         const panel = makeElement("section", "paper-panel form-panel login-panel");
         const hasPassword = localStorage.getItem(PASSWORD_KEY) !== null;
         panel.append(makeElement("p", "local-notice", hasPassword
-            ? "Este bloqueo solo controla la edición en este navegador. No protege el diario frente a otras personas que puedan abrir los archivos o inspeccionar el navegador."
-            : "Primera vez: crea una clave local para mostrar los controles de edición. No es una contraseña segura y no cifra ni protege tus páginas."));
+            ? "El usuario y la contraseña solo ocultan los controles en este navegador. No protegen el sitio público ni publican cambios en GitHub Pages."
+            : "Escribe el usuario del dueño y crea una contraseña para este navegador. Como el sitio es estático, este acceso no protege ni publica cambios en GitHub Pages."));
         const form = makeElement("form");
+        const usernameGroup = makeElement("div", "form-group");
+        const usernameLabel = makeElement("label", "", "Usuario");
+        usernameLabel.htmlFor = "owner-username";
+        const username = document.createElement("input");
+        username.id = "owner-username";
+        username.type = "text";
+        username.autocomplete = "username";
+        username.required = true;
+        username.value = OWNER_USERNAME;
+        usernameGroup.append(usernameLabel, username);
+
         const passwordGroup = makeElement("div", "form-group");
-        const passwordLabel = makeElement("label", "", hasPassword ? "Contraseña local" : "Crea tu contraseña local");
+        const passwordLabel = makeElement("label", "", hasPassword ? "Contraseña" : "Crea tu contraseña");
         passwordLabel.htmlFor = "owner-password";
         const password = document.createElement("input");
         password.id = "owner-password";
@@ -381,11 +393,15 @@
         submit.className = "btn btn-primary";
         submit.textContent = hasPassword ? "Entrar" : "Guardar clave y entrar";
         actions.append(submit, makeLink("Volver a la portada", "#/"));
-        form.append(passwordGroup, actions);
+        form.append(usernameGroup, passwordGroup, actions);
         form.addEventListener("submit", async event => {
             event.preventDefault();
+            if (username.value.trim() !== OWNER_USERNAME) {
+                showFlash("El usuario no coincide.", "error");
+                return;
+            }
             if (!window.crypto || !window.crypto.subtle) {
-                showFlash("Este navegador no permite crear el bloqueo local. Usa un navegador actualizado.", "error");
+                showFlash("Este navegador no permite usar el acceso local. Usa un navegador actualizado.", "error");
                 return;
             }
             try {
