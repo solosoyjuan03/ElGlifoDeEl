@@ -1,72 +1,27 @@
-﻿<!--
-  ============================================================
-  index.html — PORTADA DEL LIBRO (página de inicio)
-  ------------------------------------------------------------
-  QUÉ ES:  La primera página que ve el lector. Muestra la
-           portada oficial del libro y el botón para abrirlo.
-
-  ESTRUCTURA DEL PROYECTO (para futuros programadores):
-    index.html            → esta portada
-    introduccion.html     → Introducción completa
-    prologo.html          → Prólogo completo
-    capitulos/capitulo-N.html → un archivo por capítulo
-    Sitio web publicado  → https://solosoyjuan03.github.io/ElGlifoDeEl/
-    assets/img/portada.png → imagen de portada del libro
-    css/styles.css        → estilos compartidos por TODAS las páginas
-
-  PUBLICAR CAMBIOS EN EL SITIO:
-    GitHub Pages publica automáticamente los cambios de la rama main.
-    Para trabajar desde tu computador, clona primero el repositorio:
-      git clone https://github.com/solosoyjuan03/ElGlifoDeEl.git
-    Después de editar archivos en esa copia, súbelos con:
-      git add .
-      git commit -m "Describe tus cambios"
-      git push origin main
-    Si subes archivos directamente desde GitHub, confirma los cambios
-    en main; la publicación también se iniciará automáticamente.
-    Puedes revisar su estado en la pestaña Actions del repositorio.
-
-  Cada parte se lee en un solo archivo HTML. El sitio publicado
-  permite abrir el libro desde su dirección en línea.
-  La navegación principal funciona con enlaces <a href>.
-  ============================================================
--->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <!-- Cabeza de la página: configuración básica -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Profecía del Glifo de ÉL — Juan D. Henao</title>
-
-  <!-- Tipografías antiguas (Cinzel para títulos, Cormorant para texto) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
-  <!-- Hoja de estilos compartida por TODO el libro -->
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#160d0a">
+    <meta name="description" content="El diario personal de SolosoyJuan.">
+    <title>El diario de SolosoyJuan</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="data/initial-data.js"></script>
+    <script src="app.js" defer></script>
 </head>
 <body>
-
-  <!-- ============ PORTADA ============ -->
-  <!-- .portada: sección a pantalla completa con fondo animado -->
-  <section class="portada">
-    <!-- .portada-fondo: brillos dorados y de fuego decorativos (solo CSS) -->
-    <div class="portada-fondo"></div>
-
-    <!-- .portada-contenido: apila la imagen y el botón en columna -->
-    <div class="portada-contenido">
-      <!-- Portada oficial del libro (imagen en assets/img/) -->
-      <img src="assets/img/portada.png"
-           alt="La Profecía del Glifo de ÉL — Portada"
-           class="portada-img">
-
-      <!-- Botón para entrar a la lectura. -->
-      <a href="indice.html" class="btn-abrir">Abrir el libro</a>
-      <a href="libro-completo.html" class="btn-abrir">Descargar libro en PDF</a>
-    </div>
-  </section>
-
+    <header class="site-header">
+        <a class="brand" href="#/" aria-label="Volver a la portada">
+            <span class="brand-mark" aria-hidden="true">✦</span>
+            <span>El diario de<br>SolosoyJuan</span>
+        </a>
+        <nav id="site-nav" class="site-nav" aria-label="Navegación principal"></nav>
+    </header>
+    <main id="app" class="container" tabindex="-1"></main>
+    <footer id="site-footer" class="site-footer">
+        Un espacio para guardar historias, recuerdos y pensamientos.
+    </footer>
+    <input id="import-file" class="visually-hidden" type="file" accept="application/json,.json">
 </body>
 </html>
