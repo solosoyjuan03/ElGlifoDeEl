@@ -362,20 +362,9 @@
         const panel = makeElement("section", "paper-panel form-panel login-panel");
         const hasPassword = localStorage.getItem(PASSWORD_KEY) !== null;
         panel.append(makeElement("p", "local-notice", hasPassword
-            ? "El usuario y la contraseña solo ocultan los controles en este navegador. No protegen el sitio público ni publican cambios en GitHub Pages."
-            : "Escribe el usuario del dueño y crea una contraseña para este navegador. Como el sitio es estático, este acceso no protege ni publica cambios en GitHub Pages."));
+            ? "Esta clave solo oculta los controles de edición en este navegador. No protege el sitio público ni publica cambios en GitHub Pages."
+            : "Crea una clave local para mostrar los controles de edición en este navegador. No es una contraseña segura y no protege el sitio público."));
         const form = makeElement("form");
-        const usernameGroup = makeElement("div", "form-group");
-        const usernameLabel = makeElement("label", "", "Usuario");
-        usernameLabel.htmlFor = "owner-username";
-        const username = document.createElement("input");
-        username.id = "owner-username";
-        username.type = "text";
-        username.autocomplete = "username";
-        username.required = true;
-        username.value = OWNER_USERNAME;
-        usernameGroup.append(usernameLabel, username);
-
         const passwordGroup = makeElement("div", "form-group");
         const passwordLabel = makeElement("label", "", hasPassword ? "Contraseña" : "Crea tu contraseña");
         passwordLabel.htmlFor = "owner-password";
@@ -393,13 +382,9 @@
         submit.className = "btn btn-primary";
         submit.textContent = hasPassword ? "Entrar" : "Guardar clave y entrar";
         actions.append(submit, makeLink("Volver a la portada", "#/"));
-        form.append(usernameGroup, passwordGroup, actions);
+        form.append(passwordGroup, actions);
         form.addEventListener("submit", async event => {
             event.preventDefault();
-            if (username.value.trim() !== OWNER_USERNAME) {
-                showFlash("El usuario no coincide.", "error");
-                return;
-            }
             if (!window.crypto || !window.crypto.subtle) {
                 showFlash("Este navegador no permite usar el acceso local. Usa un navegador actualizado.", "error");
                 return;

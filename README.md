@@ -1,27 +1,19 @@
-# Diario de SolosoyJuan
+# El diario de SolosoyJuan
 
-Diario estático publicado desde la raíz de este repositorio con GitHub Pages.
+Diario estático hecho con HTML, CSS y JavaScript. No necesita Python, Flask ni instalar paquetes.
 
 ## Uso
 
-Abre `index.html` en un navegador moderno o visita el sitio publicado. No requiere Python, Flask ni instalar paquetes.
+Abre `index.html` en un navegador moderno. El recorrido de lectura es portada → índice → páginas → «Continuará» → contraportada. La primera vez que se entra a la edición se crea una contraseña local para ese navegador; después, solo se solicita esa contraseña.
 
-El recorrido de lectura es portada → índice → páginas → «Continuará» → contraportada. El usuario del formulario de edición es `solosoyjuan`. La contraseña no está escrita en los archivos públicos: la primera vez se crea una clave local en el navegador.
+Las páginas nuevas, ediciones y eliminaciones se guardan en el almacenamiento local del navegador actual. **No se sincronizan ni se publican en GitHub Pages.** Usa **Exportar respaldo** para descargar una copia JSON.
 
-## Datos y privacidad
+## Publicación y acceso
 
-`data/initial-data.js` incluye las entradas iniciales del diario. Este repositorio y todos sus archivos son públicos; cualquier visitante puede leer y descargar esas entradas.
+El sitio publicado es público y sus entradas iniciales se pueden consultar en `data/initial-data.js`. GitHub Pages solo sirve archivos estáticos: la contraseña local oculta los controles en este navegador, pero no es autenticación del servidor. Cualquiera puede inspeccionar el JavaScript, modificar su propio navegador o leer los datos.
 
-**Importante:** GitHub Pages no ejecuta un servidor ni puede verificar credenciales privadas. El formulario solo oculta los controles y guarda cambios en el navegador actual; no protege el diario público, no sincroniza cambios y no los publica en GitHub. La publicación del sitio se controla con los permisos de la cuenta y del repositorio de GitHub.
+Para publicar cambios en el diario en línea se necesita acceso autorizado al repositorio de GitHub. No se guarda ninguna contraseña en los archivos públicos.
 
-Usa **Exportar respaldo** para descargar una copia JSON y **Importar respaldo** para reemplazar las entradas del navegador con una copia guardada.
+## Respaldo anterior
 
-## Archivos
-
-```text
-index.html
-styles.css
-app.js
-data/initial-data.js
-static/images/
-```
+`instance/diario.db` se conserva únicamente como respaldo local de la aplicación anterior. La versión estática no la utiliza. No publiques ni compartas ese archivo.
