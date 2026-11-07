@@ -138,7 +138,7 @@ h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
     gap: 22px;
     padding: 8px 0 24px;
 }
-.cover-link { display: block; width: min(360px, 78vw); perspective: 1000px; }
+.cover-link { display: block; width: min(560px, 88vw); perspective: 1000px; }
 .cover-image, .back-cover-image {
     display: block;
     width: 100%;
@@ -300,7 +300,7 @@ textarea { min-height: 280px; resize: vertical; line-height: 1.8; }
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
-    .print-cover, .print-copyright, .print-index, .print-ending, .print-back-cover, .print-entry {
+    .print-cover, .print-copyright, .print-index, .print-ending, .print-entry {
         box-sizing: border-box;
         width: 8.5in;
         height: 11in;
@@ -328,22 +328,22 @@ textarea { min-height: 280px; resize: vertical; line-height: 1.8; }
             radial-gradient(ellipse at 50% -20%, rgba(119, 62, 24, .38), transparent 55%),
             linear-gradient(145deg, #0d0908, #21120d 55%, #100b09);
     }
-    .print-cover-art { position: relative; width: min(360px, 78vw); aspect-ratio: 2 / 3; flex: none; overflow: visible; }
-    .print-back-cover-art { position: relative; width: 7.333333in; height: 11in; flex: none; overflow: hidden; }
+    .print-cover-art { position: relative; width: min(6.5in, 78vw); aspect-ratio: 2 / 3; flex: none; overflow: visible; }
+    .print-back-cover-art { position: relative; width: 7.3in; height: 10.95in; flex: none; overflow: hidden; }
     .print-cover-art { margin: 0 auto; }
-    .print-back-cover-art { width: 7.333333in; margin: 0 auto; }
+    .print-back-cover-art { width: 7.3in; margin: 0 auto; }
     .print-cover { break-after: page; page-break-after: always; }
     .print-cover-image, .print-back-cover-image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-    .print-cover-frame { position: absolute; z-index: 1; inset: 0; display: block; width: 100%; height: 100%; }
     .print-cover .print-cover-image {
         border: 1px solid rgba(255, 207, 100, .75);
         border-radius: 3px 8px 8px 3px;
         box-shadow: 14px 18px 34px rgba(0, 0, 0, .58), 5px 0 0 #4c2912, 8px 0 0 #1b100b;
     }
+    .print-back-cover-image { border: 0; border-radius: 0; box-shadow: none; }
     .print-cover .print-copyright-notice {
         position: static;
         z-index: auto;
-        width: min(360px, 78vw);
+        width: min(6.5in, 78vw);
         margin: 0;
         padding: 0;
         border-radius: 0;
@@ -360,21 +360,24 @@ textarea { min-height: 280px; resize: vertical; line-height: 1.8; }
     .print-has-paper-background { position: relative; overflow: hidden; }
     .print-has-paper-background > :not(.print-page-background) { position: relative; z-index: 1; }
     .print-cover, .print-back-cover { position: relative; overflow: hidden; }
-    .print-back-cover .print-source-footer { z-index: 2; }
-    .print-entry-content { orphans: 3; widows: 3; }
-    .print-ending { break-after: page; page-break-after: always; }
-    .print-back-cover { break-after: auto; page-break-after: auto; }
-    .print-source-footer {
-        position: absolute;
-        right: .5in;
-        bottom: .15in;
-        left: .5in;
-        color: #ffd77f;
-        font: 8pt/1.2 Arial, sans-serif;
-        text-align: center;
-        text-shadow: 0 1px 2px #000;
-        background: rgba(22, 13, 10, .78);
+    .print-back-cover-image {
+        border: 1px solid rgba(255, 207, 100, .75);
+        border-radius: 3px 8px 8px 3px;
+        box-shadow: 14px 18px 34px rgba(0, 0, 0, .58), 5px 0 0 #4c2912, 8px 0 0 #1b100b;
     }
+    .print-entry-content { orphans: 3; widows: 3; }
+    .print-ending { break-after: auto; page-break-after: auto; }
+    .print-back-cover {
+        box-sizing: border-box;
+        width: 8.5in;
+        height: 10.95in;
+        margin: 0;
+        padding: 0;
+    }
+    .print-book > * { break-before: auto !important; page-break-before: auto !important; }
+    .print-book > :not(:last-child) { break-after: page !important; page-break-after: always !important; }
+    .print-book > :last-child { break-after: auto !important; page-break-after: auto !important; }
+    #import-file { display: none !important; }
 }
 
 @media (max-width: 620px) {

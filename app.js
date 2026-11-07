@@ -217,11 +217,7 @@
         backCoverImage.className = "print-back-cover-image";
         backCoverImage.src = "static/images/contraportada-cuero.png";
         backCoverImage.alt = "Contraportada del diario";
-        backCoverArt.append(
-            backCoverImage,
-            createPrintOrnamentalFrame(),
-            makeElement("footer", "print-source-footer", "Descargado desde https://solosoyjuan03.github.io/solosoyjuan/")
-        );
+        backCoverArt.append(backCoverImage);
         backCover.append(backCoverArt);
         book.append(backCover);
 
@@ -231,36 +227,6 @@
                 printReturnHash = null;
                 showFlash(`No se pudo preparar el PDF porque falló una imagen: ${error.message}`, "error");
             });
-    }
-
-    function createPrintOrnamentalFrame() {
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 1152" fill="none">
-            <rect x="28" y="28" width="712" height="1096" rx="22" stroke="#f2b94f" stroke-width="5" opacity=".9"/>
-            <rect x="48" y="48" width="672" height="1056" rx="16" stroke="#ffd77f" stroke-width="2" opacity=".8"/>
-            <path d="M92 155H676M92 997H676M92 155V997M676 155V997" stroke="#e7ad45" stroke-width="2" opacity=".65"/>
-            <g stroke="#ffd77f" stroke-width="3" opacity=".9">
-                <circle cx="92" cy="92" r="34"/><circle cx="676" cy="92" r="34"/>
-                <circle cx="92" cy="1060" r="34"/><circle cx="676" cy="1060" r="34"/>
-                <circle cx="384" cy="92" r="20"/><circle cx="384" cy="1060" r="20"/>
-                <path d="M92 68l24 24-24 24-24-24zM676 68l24 24-24 24-24-24z"/>
-                <path d="M92 1036l24 24-24 24-24-24zM676 1036l24 24-24 24-24-24z"/>
-                <path d="M384 68v48m-24-24h48M384 1036v48m-24-24h48"/>
-            </g>
-            <g stroke="#e7ad45" stroke-width="2" opacity=".7">
-                <path d="M150 140l15 15-15 15-15-15zM194 140l15 15-15 15-15-15zM238 140l15 15-15 15-15-15zM282 140l15 15-15 15-15-15z"/>
-                <path d="M486 140l15 15-15 15-15-15zM530 140l15 15-15 15-15-15zM574 140l15 15-15 15-15-15zM618 140l15 15-15 15-15-15z"/>
-                <path d="M150 982l15 15-15 15-15-15zM194 982l15 15-15 15-15-15zM238 982l15 15-15 15-15-15zM282 982l15 15-15 15-15-15z"/>
-                <path d="M486 982l15 15-15 15-15-15zM530 982l15 15-15 15-15-15zM574 982l15 15-15 15-15-15zM618 982l15 15-15 15-15-15z"/>
-                <path d="M92 230l-15 15 15 15 15-15zM92 310l-15 15 15 15 15-15zM92 390l-15 15 15 15 15-15zM92 470l-15 15 15 15 15-15zM92 550l-15 15 15 15 15-15zM92 630l-15 15 15 15 15-15zM92 710l-15 15 15 15 15-15zM92 790l-15 15 15 15 15-15zM92 870l-15 15 15 15 15-15z"/>
-                <path d="M676 230l-15 15 15 15 15-15zM676 310l-15 15 15 15 15-15zM676 390l-15 15 15 15 15-15zM676 470l-15 15 15 15 15-15zM676 550l-15 15 15 15 15-15zM676 630l-15 15 15 15 15-15zM676 710l-15 15 15 15 15-15zM676 790l-15 15 15 15 15-15zM676 870l-15 15 15 15 15-15z"/>
-            </g>
-        </svg>`;
-        const image = document.createElement("img");
-        image.className = "print-cover-frame";
-        image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-        image.alt = "";
-        image.setAttribute("aria-hidden", "true");
-        return image;
     }
 
     function addPrintPaperBackground(section) {
